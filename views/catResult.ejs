@@ -1,0 +1,24 @@
+<%- include("partials/header") -%>
+<h3>Result</h3>
+<p>Category Name: <%=categoryName%></p>
+<p>Category ID: <%=categoryId%></p>
+<% searchResult.forEach((item)=>{ %>
+    <% new Promise ((resolve,reject) =>{ %>
+        <img src="<%= item.image.imageUrl %>" alt="items display image">
+        <p>item ID: <%= item.itemId %></p>
+        <p>Title: <%= item.title %></p>
+        <p>Price: <%= item.price.value %></p>
+        <p>Currency: <%= item.price.currency %></p>
+        <p>Condition: <%= item.condition %></p>
+        <p>Seller: <%= item.seller.username%></p>
+        <p>Client Feedback (%): <%= item.seller.feedbackPercentage%></p>
+        <p>Location: <%= item.itemLocation.country %></p>
+        <hr>
+        <% setTimeout(() => { %>
+        <% resolve() %>
+        <% }, 1000)%>
+     <% })%>
+ <% })%>
+    
+    <a href="/category">BACK TO SEARCH</a>
+<%- include("partials/footer") -%>
