@@ -13,9 +13,6 @@ app.use(express.static("public"));
 // app.set('view engine', 'ejs');
 
 
-app.get("/", (req, res) =>{
-  res.sendFile(path.join(__dirname + "/frontend/index.html"));
-})
 //[API for searching for categoryID ] Define the endpoint for the getCategoryDetails API
 app.use('/api/categories', require("./routes/category"));
 

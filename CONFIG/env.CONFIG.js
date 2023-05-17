@@ -5,6 +5,7 @@ const  CONFIG =  {
     port: process.env.port,
     client_id: process.env.client_id,
     client_secret: process.env.client_secret,
+    devId: process.env.devId,
     redirect_uri: process.env.redirect_uri,
     auth_endpoint : process.env.auth_endpoint
 
