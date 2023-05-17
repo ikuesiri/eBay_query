@@ -1,7 +1,7 @@
 <%- include("partials/header") -%>
     <h1> Welcome to Kik-Store</h1>
     
-     <p>Search for CategoryID</p>
+     <p>Search for Products CategoryID</p>
      <form action="/category" method="post">
         <label >Category Name</label>
         <input type="text" name="name" required autofocus>
@@ -12,5 +12,6 @@
         <p>click to view <a href="/category/categoryid/<%= categoryId %>">More</a> details
       
     </div>
+
 
     <%- include("partials/footer") -%>

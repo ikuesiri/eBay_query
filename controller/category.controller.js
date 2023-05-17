@@ -3,20 +3,12 @@ const eBayApi = require('ebay-api')
 const eBayObj = require("../CONFIG/ebayObj")
 
 const eBay = new eBayApi(eBayObj);
-  eBay.OAuth2.setScope([
-    'https://api.ebay.com/oauth/api_scope',
-    'https://api.ebay.com/oauth/api_scope/sell.fulfillment.readonly',
-    'https://api.ebay.com/oauth/api_scope/sell.fulfillment'
-  ]);
-  
-//   Generate and open Url and Grant Access
-  const url = eBay.OAuth2.generateAuthUrl();
-//   console.log('Open URL', url);
 
-const getCategoryId = async(req, res) =>{
-    const category_name =  req.params.category_name
-    if(!category_name || category_name.length == 0){
-        res.status(404).res.json({
+
+const getSuggestedCategories = async(req, res) =>{
+    const category_name =  req.query.category_name
+    if(!category_name || category_name.length === 0){
+        return  res.status(404).send({
             success: false,
             message: "Please Enter a Category/Product Name"
         })
@@ -25,22 +17,35 @@ const getCategoryId = async(req, res) =>{
     const eBay = new eBayApi(eBayObj);
     eBay.buy.browse.search({
         q: category_name,
-        limit: 50
+        limit: 5
       })
+    
         .then(result => {
-        //   res.send(result, null, 2);
-        const categoryId = result.itemSummaries[0].categories[0].categoryId;
-        const categoryName = result.itemSummaries[0].categories[0].categoryName;
-        const searchSummary = result.itemSummaries
-            // searchSummary.forEach((value) =>{
-            //     searchResult.push(value);
-            // })
+          const itemCategories= result.itemSummaries;
+          const uniqueCategories = []
 
-          res.send(result, null, 2);
+          itemCategories.forEach( listObj => {
+            listObj.categories.forEach(category =>{
+              const  existingCategories = uniqueCategories.find(value => value.categoryId === category.categoryId);
+              if(!existingCategories){
+                uniqueCategories.push(category);
+              }
+            })
+          });
+
+          res.write(`<h1>Suggested Categories:</h1>`);
+          uniqueCategories.forEach((list)=>{
+            if(list.categoryName !== category_name){
+              res.write(`<hr>`)
+              res.write(`<p>Category Name: ${list.categoryName}</p>`);
+              res.write(`<p>Category ID: ${list.categoryId}</p>`); 
+            }                      
+          });
+
+          return res.status(200).send();
         })
-        .catch(e => {
-          console.log(e);
+        .catch(error => {
+          console.log(error);
         });
 }
-
-module.exports = getCategoryId;
+module.exports = getSuggestedCategories;

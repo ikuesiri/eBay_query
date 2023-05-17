@@ -1,4 +1,5 @@
 const express = require("express");
+const path =require("path");
 const app = express();
 //environment variable configurations
 const CONFIG = require("./CONFIG/env.CONFIG");
@@ -8,27 +9,18 @@ app.use(express.urlencoded({extended: true}));
 //for test env like postman
 app.use(express.json());
 // set the view engine to ejs
-app.set('view engine', 'ejs');
+app.use(express.static("public"));
+// app.set('view engine', 'ejs');
 
 
-// Define the endpoint for the getCategoryDetails API
+app.get("/", (req, res) =>{
+  res.sendFile(path.join(__dirname + "/frontend/index.html"));
+})
+//[API for searching for categoryID ] Define the endpoint for the getCategoryDetails API
 app.use('/api/categories', require("./routes/category"));
 
-//TESTING AREA
-const ebayObj = require("./CONFIG/ebayObj")
-const eBayApi = require('ebay-api')
-app.get("/key", async(req, res) =>{
-  (async () => {
-    const eBay = new eBayApi(ebayObj);
-    try {
-      const signingKey = await eBay.developer.keyManagement.createSigningKey('ED25519');
-      console.log(JSON.stringify(signingKey, null, 2));
-    } catch (e) {
-      console.error(e);
-    }
-  })();
-})
-//
+//[API-B: for creating/updating/deleting]
+// app.use("/api/items", require("./routes/items"))
 
 app.listen(CONFIG.port, () => {
   console.log(`Server listening at http://localhost:${CONFIG.port}`);

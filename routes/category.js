@@ -1,7 +1,12 @@
 const express = require("express");
 const categoryRouter = express.Router();
-const getCategoryId  = require("../controller/category.controller");
+const {getSuggestedCategories, getCategoryDetails } = require("../controller/category.controller");
 
-categoryRouter.get("/:category_name", getCategoryId);
+//method GET "/"
+//Provides a list of Suggested categories
+categoryRouter.get("/", getSuggestedCategories);
+
+categoryRouter.get("/search", getCategoryDetails )
+
 
 module.exports = categoryRouter;
